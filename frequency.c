@@ -56,7 +56,7 @@ void printTrieUp(node *root, char *str, int level) {
 
     if (root->isEndOfWord) {
         str[level] = '\0';
-        printf("%s\t%lu\n", str, root->count);
+        printf("%s %lu\n", str, root->count);
     }
 
     for (int i = 0; i < NUM_LETTERS; i++) {
@@ -78,7 +78,7 @@ void printTrieDown(node *root, char str[], int level) {
 
         if (root->isEndOfWord) {
             str[level] = '\0';
-            printf("%s\t%lu\n", str, root->count);
+            printf("%s %lu\n", str, root->count);
         }
 }
 
