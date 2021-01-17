@@ -23,6 +23,9 @@ node *build() {
         root->isEndOfWord = FALSE;
         for (int i = 0; i < NUM_LETTERS; i++)
             root->children[i] = NULL;
+    }else{
+        free(root);
+        exit(1);
     }
     return root;
 }
@@ -93,30 +96,46 @@ void freedom(node *root) {
 
 int main(int argc, char **argv) {
     node *root = build();
-    char ch;
+    char ch = '\0';
     char *string = NULL;
-    int size;
+    int size,endOfWords,count;
+    count=0;
     while (ch != EOF) {
-        size = 0;
+        size = 1;
+        endOfWords = 0;
         ch = 'x';
         while (ch != ' ' && ch != '\0' && ch != '\n') {
-            string = realloc(string, ++size);
+            size++;
+            endOfWords++;
+            string = realloc(string, size);
             if (string) {
                 ch = getchar();
                 if (ch == EOF) {
+                    string[endOfWords - 1] = '\0';
                     break;
                 }
-                string[size - 1] = ch;
+                string[endOfWords - 1] = ch;
+            }else{
+                free(string);
+                exit(1);
             }
         }
+        size++;
+        endOfWords++;
+        string = realloc(string, size);
+        string[endOfWords - 1] = '\0';
 
         if (string) {
             insert(root, string);
             free(string);
             string = NULL;
+        } else{
+            free(string);
+            exit(1);
         }
+        count+=endOfWords;
     }
-    char *str = (char *) malloc(sizeof(char));
+    char str[count];
     if (argc == 2) {
         if (*argv[1] == 'r') {
             printTrieDown(root, str, 0);
@@ -124,8 +143,8 @@ int main(int argc, char **argv) {
     } else
         printTrieUp(root, str, 0);
 
-    free(str);
     freedom(root);
+
 
     return 0;
 }
